@@ -7,8 +7,23 @@ colormap_88D;
 fprintf("Loading .mat file\n");
 load('mat_201857-1813.mat');
 %load('Zh_Ku_Mu3_Test_without10.mat');
-ma = load('Zh_Ku_Mu0_GPM_Wang_Att_Ex_Avg2.mat');
-test = load('WangAttMu0ExB_Avg2.mat');
+
+% Known Working
+ma = load('Zh_Ku_Mu0_GPM_Wang_Att_Ex.mat');
+test = load('WangAttMu0ExB.mat');
+
+%Reload Working
+% ma = load('Zh_Ku_Mu0_GPM_Wang_Att_Ex.mat');
+% test = load('WangAttMu0ExB_Avg_try.mat');
+
+% % Average Attempt
+% ma = load('Zh_Ku_Mu0_GPM_Wang_Att_Ex_Avg_z.mat');
+% test = load('WangAttMu0ExB_Avg_z.mat');
+
+% % Smooth Attempt
+% ma = load('Zh_Ku_Mu0_GPM_Wang_Att_Ex_Avg_smooth.mat');
+% test = load('WangAttMu0ExB_Avg_smooth.mat');
+
 % filename = 'mat_201857-1813.mat';
 % [Ku_DSD_Params, Ka_DSD_Params, indexKu, indexKa, KUP, KAP] = getDSDParams(filename);
 
@@ -38,16 +53,17 @@ Ku_VV_Calc = mean(Ku_Calc, 2, 'omitnan');
 [maxZCalc, indexC] = max(squeeze(Ku_VV_Calc(:,1,80)));   % max(Green)
 delta = maxZGiven - maxZCalc;  % max(Red) - max(Green)
 
-
+smoothedKu_VV_Calc = smoothdata(Ku_VV_Calc, 'movmean', 2);
 
 % Plot Vert. Structure of Given(Red), Calculated(Green), and deltaZ(Blue)
 figure(1)
 for i = 80:80
-    plot((squeeze(Ku_VV_Calc(:, 1, i))), Height, 'g-', 'LineWidth', 3);   % Calculated
+%     plot((squeeze(Ku_VV_Calc(:, 1, i))), Height, 'g-', 'LineWidth', 3);   % Calculated
+    plot((squeeze(smoothedKu_VV_Calc(:, 1, i))), Height, 'g-', 'LineWidth', 3);   % Calculated
     hold on;
     plot(squeeze(Ku_VV_Given(:,1,i)), Height,'r-','LineWidth',3);   % Given
     hold on;
-    deltaZ = squeeze(delta+(squeeze(Ku_VV_Calc(:, 1, i))));   % Delta + Green
+    deltaZ = squeeze(delta+(squeeze(smoothedKu_VV_Calc(:, 1, i))));   % Delta + Green
     plot(deltaZ, Height, 'b-', 'LineWidth', 3);
     grid;
     legend('Calculated w/Attenuation','GPM Given', 'Delta Z');

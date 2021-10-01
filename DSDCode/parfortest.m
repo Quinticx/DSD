@@ -38,15 +38,15 @@ parfor i = 2:176
         for k = 2457:2737
             Nw = 10^(KUP(1, i, j, k)/10);
             Dm = KUP(2, i, j, k);
-            avgNW = (10^(KUP(1, i, j, k)/10) + 10^(KUP(1, i-1, j-1, k-1)/10))/2;
-            avgDM = (10^(KUP(2, i, j, k)/10) + 10^(KUP(2, i-1, j-1, k-1)/10))/2;
+%             avgNW = (10^(KUP(1, i, j, k)/10) + 10^(KUP(1, i-1, j-1, k-1)/10))/2;
+%             avgDM = (10^(KUP(2, i, j, k)/10) + 10^(KUP(2, i-1, j-1, k-1)/10))/2;
             mu = 0; % Seto 2013, Liao 2014 both used mu = 3
-            [Zh_Ku_F(i, j, k), A_h_Ku(i, j, k)] = calculate_Z_ZDR(avgNW, mu, avgDM);
-            [Zh_Ku_F(i-1, j-1, k-1), A_h_Ku(i-1, j-1, k-1)] = calculate_Z_ZDR(avgNW, mu, avgDM);
+            [Zh_Ku_F(i, j, k), A_h_Ku(i, j, k)] = calculate_Z_ZDR(Nw, mu, Dm);
+%             [Zh_Ku_F(i-1, j-1, k-1), A_h_Ku(i-1, j-1, k-1)] = calculate_Z_ZDR(avgNW, mu, avgDM);
 %             [Zh_Ku_F(i, j, k), A_h_Ku(i, j, k)] = calculate_Z_ZDR(Nw, mu, Dm);
         end
     end
 end
 toc
-save('Zh_Ku_Mu0_GPM_Wang_Att_Ex_Avg','Zh_Ku_F','A_h_Ku');
+save('Zh_Ku_Mu0_GPM_Wang_Att_Ex_try','Zh_Ku_F','A_h_Ku');
 

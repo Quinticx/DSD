@@ -1,11 +1,11 @@
 clear
 close all
-load('Zh_Ku_Mu0_GPM_Wang_Att_Ex_Avg2.mat');
+load('Zh_Ku_Mu0_GPM_Wang_Att_Ex_Avg_smooth.mat');
 
 
 
 Zh_Ku_F_Att = Zh_Ku_F;
-sum = zeros(176, 49, 2637);
+% sum = zeros(176, 49, 2737);
 
 % Initialize Sum
 for i = 1:1
@@ -17,7 +17,7 @@ for i = 1:1
 end
 
 % Calculate All Attenuation
-for i = 2:175
+for i = 2:176
     for j = 2:49
         for k = 2457:2737
             sum(i,j,k) = sum(i-1,j-1,k-1) + A_h_Ku(i,j,k);
@@ -27,7 +27,7 @@ end
 
 
 % Get Attenuated Zh
-parfor x = 1:175
+parfor x = 1:176
     disp(x);
     for j = 1:49
         for k = 2457:2737
@@ -40,4 +40,4 @@ if Zh_Ku_F_Att == Zh_Ku_F
     fprintf("They are the same");
 end
 
-save('WangAttMu0ExB_Avg2', 'Zh_Ku_F_Att');
+save('WangAttMu0ExB_Avg_smooth', 'Zh_Ku_F_Att');
