@@ -1,7 +1,14 @@
 %function [Zh_S_F, Zh_C_F, A_h_S, A_h_C, Zh_Ku_F, Zh_Ka_F, A_h_Ku, A_h_Ka] = parameter_estimation(DSD)
 function [Zh_Ku_F, A_h_Ku] = parameter_estimation(DSD, GDSD)
+persistent Kw_Ku;
+persistent fa_Ku;
+persistent fb_Ku;
+persistent loaded_Ku;
 
-
+persistent Kw_Ku_F;
+persistent fa_Ku_F;
+persistent fb_Ku_F;
+persistent loaded_Ku_F;
 
 
 %==========================================================================
@@ -41,7 +48,16 @@ CC = 1/8*(1-cos(4*Phi)*exp(-8*Std^2));
 %==========================================================================
 % [Kw_S, fa_S, fb_S] = load_Tmatrix_S(temp, ROW);
 % [Kw_C, fa_C, fb_C] = load_Tmatrix_C(temp, ROW);
-[Kw_Ku, fa_Ku, fb_Ku] = load_Tmatrix_Ku(temp, ROW);
+
+if isempty(loaded_Ku)
+    try
+        load("ku.mat", "Kw_Ku", "fa_Ku", "fb_Ku");
+    catch
+        [Kw_Ku, fa_Ku, fb_Ku] = load_Tmatrix_Ku(temp, ROW);
+        save("ku.mat", "Kw_Ku", "fa_Ku", "fb_Ku");
+    end
+    loaded_Ku = 1;
+end
 % [Kw_Ka, fa_Ka, fb_Ka] = load_Tmatrix_Ka(temp, ROW);
 
 %==========================================================================
@@ -49,7 +65,17 @@ CC = 1/8*(1-cos(4*Phi)*exp(-8*Std^2));
 %==========================================================================
 % [Kw_S_F, fa_S_F, fb_S_F] = load_Tmatrix_S_Forward(temp, ROW);
 % [Kw_C_F, fa_C_F, fb_C_F] = load_Tmatrix_C_Forward(temp, ROW);
-[Kw_Ku_F, fa_Ku_F, fb_Ku_F] = load_Tmatrix_Ku_Forward(temp, ROW);
+
+if isempty(loaded_Ku_F)
+    try
+        load("ku_forward.mat", "Kw_Ku_F", "fa_Ku_F", "fb_Ku_F");
+    catch
+        [Kw_Ku_F, fa_Ku_F, fb_Ku_F] = load_Tmatrix_Ku_Forward(temp, ROW);
+        save("ku_forward.mat", "Kw_Ku_F", "fa_Ku_F", "fb_Ku_F");
+    end
+    loaded_Ku_F = 1;
+end
+
 % [Kw_Ka_F, fa_Ka_F, fb_Ka_F] = load_Tmatrix_Ka_Forward(temp, ROW);
 
     
